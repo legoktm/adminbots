@@ -21,7 +21,7 @@ class Cache:
             self.mc = memcache.Client(["127.0.0.1"])
         else:
             self.mc = None
-        self.filename = self.config['cache_file'] + '.json'
+        self.filename = self.config['cache_file'] + '.cache'
         self.load()
 
     def load(self):
