@@ -25,7 +25,7 @@ import sys
 import subprocess
 
 program = sys.argv[1]
-run = subprocess.cal('jstart '
+run = subprocess.call('jstart '
                      '-N {0} '
                      '-mem 2G '
                      '/data/project/legobot/irclib/bin/python '
