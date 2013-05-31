@@ -20,3 +20,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE.
 """
+#jstart -N uaa -mem 2G /data/project/legobot/irclib/bin/python /data/project/legobot/adminbots/ufaa.py
+import sys
+import subprocess
+
+program = sys.argv[1]
+run = subprocess.cal('jstart '
+                     '-N {0} '
+                     '-mem 2G '
+                     '/data/project/legobot/irclib/bin/python '
+                     '/data/project/legobot/adminbots/{0}.py'.format(program))
