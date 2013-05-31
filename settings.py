@@ -11,7 +11,7 @@ config = {
 
     # RC feed info
     'rc_network': 'irc.wikimedia.org',  # RC feed network
-    'rc_channel': '#en.wikipedia',  # TODO: Make this a list
+    'rc_channel': ['#en.wikipedia'],
 
     # Identification info
     'nick': 'AIV',  # Both networks

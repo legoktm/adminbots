@@ -153,7 +153,8 @@ class Bot:
         if self.use_rc:
             self.rcfeed = self.irc.server()
             self.rcfeed.connect(self.config['rc_network'], self.config['port'], self.config['nick'], self.config['name'])
-            self.rcfeed.join(self.config['rc_channel'])
+            for channel in self.config['rc_channel']:
+                self.rcfeed.join(channel)
 
         while True:
             self.irc.process_once(timeout=0.1)
