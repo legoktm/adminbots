@@ -25,11 +25,13 @@ IN THE SOFTWARE.
 import cache
 import mwparserfromhell
 import pywikibot
-import settings
+from pywikibot.data import api
 import Queue
 import re
+import urllib
 
 import bot
+import settings
 
 config = settings.config
 config['debug'] = False
@@ -65,15 +67,93 @@ def parse(page, rcv):
     return s
 
 
-def parse_all(rcv):
+def parse_all(rcv, bot=False):
     l = []
     for page in pages:
         l += parse(page, rcv)
     l = list(set(l))
+    old = mc.get('aiv')
+    for c in l:
+        if not c in old:
+            info = all_info(c)
+            for m in info:
+                rcv.pull.put((None, m))
+
     mc.set('aiv', l)
+    if bot and l:
+        rcv.pull.put((None, 'There are {0} requests on AIV.'.format(len(l))))
     rcv.debug(l)
     print l
 
+
+def all_info(username):
+    return user_info(username) + block_info(username) + af_info(username)
+
+
+def block_info(username):
+    text = []
+    #list=logevents&letype=block&lelimit=100&format=jsonfm&letitle=User:Legobot
+    params = {'action': 'query',
+              'list': 'logevents',
+              'letype': 'block',
+              'lelimit': 'max',
+              'letitle': 'User:' + username,
+              }
+    req = api.Request(**params)
+    data = req.submit()
+    data = data['query']['logevents']
+    if not data:
+        text.append('blockinfo: user has not been blocked before')
+        return text
+    last = data[0]
+    if last['action'] == 'unblock':
+        text.append('last unblocked by {user} with comment: {comment}'.format(**last))
+    elif last['action'] in ['block', 'reblock']:
+        text.append('last {action}ed by {user} for {duration} with comment: {comment}'.format(
+            duration=last['block']['duration'], **last
+        ))
+    else:
+        # ???
+        pass
+    return text
+
+
+def user_info(username):
+    text = ['[[User:{0}]]: https://en.wikipedia.org/wiki/Special:Contributions/{1}'.format(
+        username, urllib.quote_plus(username.replace(' ', '_').encode('utf-8')))]
+    #&list=users&ususers=Legoktm&usprop=blockinfo|groups|editcount|registration&format=jsonfm
+    params = {'action': 'query',
+              'list': 'users',
+              'ususers': username,
+              'usprop': 'blockinfo|groups|editcount|registration',
+              }
+    req = api.Request(**params)
+    data = req.submit()
+    data = data['query']['users'][0]
+    print data
+    if 'missing' in data or 'invalid' in data:
+        return text
+    text.append('editcount: {0}'.format(data['editcount']))
+    text.append('userrights: {0}'.format(', '.join(data['groups'])))
+    if 'blockid' in data:
+        text.append('{0} is currently blocked'.format(username))
+    return text
+
+
+def af_info(username):
+    l = []
+    #action=query&list=abuselog&afluser=Lichj&format=jsonfm
+    params = {'action': 'query',
+              'list': 'abuselog',
+              'afluser': username,
+              'afllimit': 50,
+              }
+    req = api.Request(**params)
+    data = req.submit()
+    count = len(data['query']['abuselog'])
+    if count:
+        l.append('af hits: {0}'.format(count))
+    return l
 
 
 class RcvThread(bot.ReceiveThread):
@@ -85,9 +165,10 @@ class RcvThread(bot.ReceiveThread):
 
     def rc_hit(self, diff, raw):
         if 'page' in diff and diff['page'] in pages:
-            if not diff['user'] in AIVbots:
+            bot = diff['user'] in AIVbots
+            if not bot:
                 self.pull.put((None, raw))
-            parse_all(self)
+            parse_all(self, bot)
         elif 'log' in diff and diff['log'] == 'block':
             #self.pull.put((None, raw))
             for user in mc.get('aiv'):
@@ -111,6 +192,10 @@ class RcvThread(bot.ReceiveThread):
                 self.pull.put((chan, real_text))
         elif text.startswith('!clear'):
             mc.set('aiv', [])
+        elif text.startswith('!info'):
+            username = ' '.join(text.split(' ')[1:])
+            for line in all_info(username):
+                self.pull.put((None, line))
 
 push = Queue.Queue()
 pull = Queue.Queue()
