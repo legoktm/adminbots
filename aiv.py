@@ -41,6 +41,7 @@ pages = ['Wikipedia:Administrator intervention against vandalism',
          #'User:Legoktm/test',
          ]
 AIVbots = ['HBC AIV helperbot7',
+           'HBC AIV helperbot5',
            ]
 
 mc = cache.Cache(config)
