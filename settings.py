@@ -37,9 +37,11 @@ config = {
     'debug': True,
 }
 
+# Change config via commandline
+if '--debug' in sys.argv:
+    config['debug'] = True
+if '--file-cache' in sys.argv:
+    config['use_memcache'] = False
+if '--memcache' in sys.argv:
+    config['use_memcache'] = True
 
-def parse(config):
-    for arg in sys.argv:
-        if '--debug' in arg:
-            config['debug'] = True
-    return config
