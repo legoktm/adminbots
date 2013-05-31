@@ -24,6 +24,12 @@ class Cache:
         self.filename = self.config['cache_file'] + '.cache'
         self.load()
 
+    def __contains__(self, item):
+        if self.use_mc:
+            return item in self.mc
+        else:
+            return item in self.d
+
     def load(self):
         if os.path.exists(self.filename):
             with open(self.filename, 'r') as f:
