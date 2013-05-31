@@ -21,12 +21,18 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE.
 """
 #jstart -N uaa -mem 2G /data/project/legobot/irclib/bin/python /data/project/legobot/adminbots/ufaa.py
-import sys
+import os
 import subprocess
+import sys
+
+environ = os.environ
+environ['PATH'] = '/bin:/usr/bin:/usr/local/bin'
 
 program = sys.argv[1]
 run = subprocess.call('jstart '
                      '-N {0} '
                      '-mem 2G '
                      '/data/project/legobot/irclib/bin/python '
-                     '/data/project/legobot/adminbots/{0}.py'.format(program))
+                     '/data/project/legobot/adminbots/{0}.py'.format(program),
+                      stderr=subprocess.STDOUT, shell=True, env=environ)
+
