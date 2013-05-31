@@ -11,7 +11,7 @@ import bot
 
 config = settings.config
 config['nick'] = 'UfAA'
-config['debug'] = True
+config['debug'] = False
 config['cache_file'] = 'ufaa'
 
 pages = ['Wikipedia:Usernames for administrator attention',

@@ -73,7 +73,7 @@ class RcvThread(bot.ReceiveThread):
             parse(diff['page'], self)
         elif 'log' in diff and diff['log'] == 'protect':
             #self.pull.put((None, raw))
-            print repr(diff['summary'])
+            #print repr(diff['summary'])
             for title in mc.get('rfpp'):
                 if diff['summary'].startswith('protected {0}'.format(title)):
                     self.pull.put((None, raw))
