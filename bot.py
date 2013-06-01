@@ -25,6 +25,7 @@ import irc.client as irclib
 import re
 import threading
 import time
+import traceback
 import Queue
 
 # The following regexes are from bjweeks' & MZMcBride's snitch.py
@@ -76,7 +77,10 @@ class ReceiveThread(threading.Thread):
     def run(self):
         while True:
             channel, text, sender = self.queue.get()
-            self.parse(channel, text, sender)
+            try:
+                self.parse(channel, text, sender)
+            except:
+                traceback.print_exc()
             self.queue.task_done()
 
 
@@ -103,6 +107,12 @@ class Bot:
         self.push.put((channel, text, sender))
 
     def send_msg(self, channel, text):
+        try:
+            self._send_msg(channel, text)
+        except:
+            traceback.print_exc()
+
+    def _send_msg(self, channel, text):
         if not channel:
             channel = self.config['channel']
         d = time.time()
