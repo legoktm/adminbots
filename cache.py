@@ -18,7 +18,7 @@ class Cache:
         self.config = config
         self.use_mc = memcache and self.config['use_memcache']
         if self.use_mc:
-            self.mc = memcache.Client(["127.0.0.1"])
+            self.mc = memcache.Client([self.config['mc_host']])
         else:
             self.mc = None
         self.filename = self.config['cache_file'] + '.cache'

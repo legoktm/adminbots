@@ -25,6 +25,7 @@ config = {
 
     # Whether to use memcache if possible
     'use_memcache': True,
+    'mc_host': '127.0.0.1',
 
     # How many seconds to wait in between reconnection attempts
     'reconnection_interval': 5,
