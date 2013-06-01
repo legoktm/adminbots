@@ -28,6 +28,7 @@ import pywikibot
 from pywikibot.data import api
 import Queue
 import re
+import sh
 import urllib
 
 import bot
@@ -131,8 +132,10 @@ def user_info(username):
     data = req.submit()
     data = data['query']['users'][0]
     print data
-    if 'missing' in data or 'invalid' in data:
+    if 'missing' in data:
         return text
+    elif 'invalid' in data:  # IP address
+        return text + rDNS(username)
     text.append('editcount: {0}'.format(data['editcount']))
     text.append('userrights: {0}'.format(', '.join(data['groups'])))
     if 'blockid' in data:
@@ -154,6 +157,11 @@ def af_info(username):
     if count:
         l.append('af hits: {0}'.format(count))
     return l
+
+
+def rDNS(ip):
+    data = sh.dig('-x' , ip)
+    return ['rDNS: ' + data.splitlines()[11].split('\t')[-1][:-1]]
 
 
 class RcvThread(bot.ReceiveThread):
