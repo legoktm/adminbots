@@ -146,7 +146,8 @@ class Bot:
 
         self.freenode = self.irc.server()
         self.freenode.connect(self.config['network'], self.config['port'], self.config['nick'], self.config['name'])
-        self.auth()
+        if self.config['authenticate']:
+            self.auth()
         self.freenode.join(self.config['chatter-channel'])
         self.freenode.join(self.config['channel'])
 

@@ -30,6 +30,7 @@ config = {
     'reconnection_interval': 5,
 
     # NickServ information
+    'authenticate': False,
     'ns_username': 'legobot',
     'ns_pw': private.ns_pw,
 
