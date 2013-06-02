@@ -140,8 +140,28 @@ class Bot:
             if len(e.arguments) > 1:
                 c.ctcp_reply(nick, "PING " + e.arguments[1])
 
+    def on_disconnect(self, c, e):
+        if c == self.freenode:
+            self.connect_freenode()
+        elif c == self.rcfeed:
+            self.connect_rcfeed()
+        else:
+            print 'omg i got dq\'d but dont know which server it was'
+
     def auth(self):
         self.send_msg('nickserv', 'identify {0} {1}'.format(self.config['ns_username'], self.config['ns_pw']))
+
+    def connect_freenode(self):
+        self.freenode.connect(self.config['network'], self.config['port'], self.config['nick'], self.config['name'])
+        if self.config['authenticate']:
+            self.auth()
+        self.freenode.join(self.config['chatter-channel'])
+        self.freenode.join(self.config['channel'])
+
+    def connect_rcfeed(self):
+        self.rcfeed.connect(self.config['rc_network'], self.config['port'], self.config['nick'], self.config['name'])
+        for channel in self.config['rc_channel']:
+            self.rcfeed.join(channel)
 
     def run(self):
         for i in range(0, self.config['threads']):
@@ -152,20 +172,15 @@ class Bot:
         self.irc.add_global_handler('privmsg', self.on_msg)
         self.irc.add_global_handler('pubmsg', self.on_msg)
         self.irc.add_global_handler('ctcp', self.on_ctcp)
+        self.irc.add_global_handler('disconnect', self.on_disconnect)
 
 
         self.freenode = self.irc.server()
-        self.freenode.connect(self.config['network'], self.config['port'], self.config['nick'], self.config['name'])
-        if self.config['authenticate']:
-            self.auth()
-        self.freenode.join(self.config['chatter-channel'])
-        self.freenode.join(self.config['channel'])
+        self.connect_freenode()
 
         if self.use_rc:
             self.rcfeed = self.irc.server()
-            self.rcfeed.connect(self.config['rc_network'], self.config['port'], self.config['nick'], self.config['name'])
-            for channel in self.config['rc_channel']:
-                self.rcfeed.join(channel)
+            self.connect_rcfeed()
 
         while True:
             self.irc.process_once(timeout=0.1)
