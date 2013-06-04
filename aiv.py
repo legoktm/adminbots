@@ -27,7 +27,6 @@ import mwparserfromhell
 import pywikibot
 from pywikibot.data import api
 import Queue
-import re
 import sh
 import urllib
 
@@ -35,6 +34,7 @@ import bot
 import settings
 
 config = settings.config
+config['nick'] = 'AIV'
 config['debug'] = False
 config['cache_file'] = 'aiv'
 
