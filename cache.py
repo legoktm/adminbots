@@ -7,7 +7,6 @@ except ImportError:
 import os
 import sys
 
-import settings
 
 # The point of this module is so we can easily
 # transition between systems that have memcache
@@ -76,5 +75,6 @@ class Cache:
 
 if __name__ == "__main__":
     # for easy debugging:
+    from mtirc import settings
     mc = Cache(settings.config)
     print repr(mc[str(sys.argv[1])])

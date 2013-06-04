@@ -3,11 +3,11 @@ from __future__ import unicode_literals
 import cache
 import mwparserfromhell
 import pywikibot
-import settings
 import Queue
 import re
 
-import bot
+from mtirc import bot
+from mtirc import settings
 
 config = settings.config
 config['nick'] = 'RfPP'

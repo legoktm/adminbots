@@ -30,8 +30,8 @@ import Queue
 import sh
 import urllib
 
-import bot
-import settings
+from mtirc import bot
+from mtirc import settings
 
 config = settings.config
 config['nick'] = 'AIV'
