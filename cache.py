@@ -26,7 +26,7 @@ class Cache:
 
     def __contains__(self, item):
         if self.use_mc:
-            return item in self.mc
+            return self.mc.get(item) is not None
         else:
             return item in self.d
 
