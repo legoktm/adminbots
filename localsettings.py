@@ -12,4 +12,5 @@ def update(config):
     config['memory']['aiv'] = '600M'
     config['memory']['ufaa'] = '256M'
     config['memory']['rfpp'] = '256M'
+    config['threads'] = 1
     return config
