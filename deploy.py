@@ -25,8 +25,6 @@ import os
 import subprocess
 import sys
 
-sys.argv.append('--labs')
-
 from mtirc import settings
 
 environ = os.environ
