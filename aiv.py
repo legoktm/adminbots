@@ -22,21 +22,14 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE.
 """
 
-import cache
 import mwparserfromhell
 import pywikibot
 from pywikibot.data import api
-import Queue
 import sh
 import urllib
 
 from mtirc import bot
-from mtirc import settings
 
-config = settings.config
-config['nick'] = 'AIV'
-config['debug'] = False
-config['cache_file'] = 'aiv'
 
 
 pages = ['Wikipedia:Administrator intervention against vandalism',
@@ -47,14 +40,12 @@ AIVbots = ['HBC AIV helperbot7',
            'HBC AIV helperbot5',
            ]
 
-mc = cache.Cache(config)
-mc.set('aiv', [])
 site = pywikibot.Site('en', 'wikipedia')
 #template = re.compile('\{\{(?P<template>([Ii][Pp])?[Vv]andal)\|(?P<user>.*?)\}\}')
 templates = ['ipvandal', 'vandal']
 
 
-def parse(page, rcv):
+def parse(page):
     #page: page that got updated
     #push: push queue to send a message
     pg = pywikibot.Page(site, page)
@@ -68,22 +59,21 @@ def parse(page, rcv):
     return s
 
 
-def parse_all(rcv, bot=False):
+def parse_all(boot, by_bot=False):
     l = []
     for page in pages:
-        l += parse(page, rcv)
+        l += parse(page)
     l = list(set(l))
-    old = mc.get('aiv')
+    old = boot.cache.get('aiv')
     for c in l:
         if not c in old:
             info = all_info(c)
             for m in info:
-                rcv.pull.put((None, m))
+                boot.queue_msg(None, m)
 
-    mc.set('aiv', l)
-    if bot and l:
-        rcv.pull.put((None, 'There are {0} requests on AIV.'.format(len(l))))
-    rcv.debug(l)
+    boot.cache.set('aiv', l)
+    if by_bot and l:
+        boot.queue_msg(None, 'There are {0} requests on AIV.'.format(len(l)))
     print l
 
 
@@ -164,49 +154,42 @@ def rDNS(ip):
     return ['rDNS: ' + data.splitlines()[11].split('\t')[-1][:-1]]
 
 
-class RcvThread(bot.ReceiveThread):
-    def parse(self, channel, text, sender):
-        if channel == '#en.wikipedia':
-            self.rc_hit(bot.parse_edit(text), text)
-        else:
-            self.on_msg(channel, text, sender)
+def run(**kw):
+    if kw['channel'] == '#en.wikipedia':
+        rc_hit(bot.parse_edit(kw['text']), kw['text'], kw['bot'])
+    else:
+        on_msg(kw['channel'], kw['text'], kw['sender'], kw['bot'])
 
-    def rc_hit(self, diff, raw):
-        if 'page' in diff and diff['page'] in pages:
-            bot = diff['user'] in AIVbots
-            if not bot:
-                self.pull.put((None, raw))
-            parse_all(self, bot)
-        elif 'log' in diff and diff['log'] == 'block':
-            #self.pull.put((None, raw))
-            for user in mc.get('aiv'):
-                if diff['summary'].startswith('blocked User:{0}'.format(user)):
-                    self.pull.put((None, raw))
-        elif diff['user'] in mc.get('aiv'):
-            self.pull.put((None, raw))
-            #print repr(diff['summary'])
+def rc_hit(diff, raw, boot):
+    if 'page' in diff and diff['page'] in pages:
+        by_bot = diff['user'] in AIVbots
+        if not by_bot:
+            boot.queue_msg(None, raw)
+        parse_all(boot, by_bot)
+    elif 'log' in diff and diff['log'] == 'block':
+        #self.pull.put((None, raw))
+        for user in boot.cache.get('aiv'):
+            if diff['summary'].startswith('blocked User:{0}'.format(user)):
+                boot.queue_msg(None, raw)
+    elif diff['user'] in boot.cache.get('aiv'):
+        boot.queue_msg(None, raw)
+        #print repr(diff['summary'])
 
-    def on_msg(self, channel, text, sender):
-        print text
-        if text.startswith('!ping'):
-            self.pull.put((channel, 'pong'))
-        elif text.startswith('!parse'):
-            parse_all(self)
-        elif channel == config['nick']:
-            #pm'ing with bot
-            if sender.host == 'wikipedia/Legoktm':
-                chan = text.split(' ')[0]
-                real_text = ' '.join(text.split(' ')[1:])
-                self.pull.put((chan, real_text))
-        elif text.startswith('!clear'):
-            mc.set('aiv', [])
-        elif text.startswith('!info'):
-            username = ' '.join(text.split(' ')[1:])
-            for line in all_info(username):
-                self.pull.put((None, line))
-
-push = Queue.Queue()
-pull = Queue.Queue()
-pull.put((None, 'Hello, I am a bot tracking https://en.wikipedia.org/wiki/Wikipedia:AIV'))
-b = bot.Bot(push, pull, RcvThread, config)
-b.run()
+def on_msg(channel, text, sender, boot):
+    print text
+    if text.startswith('!ping'):
+        boot.queue_msg(channel, 'pong')
+    elif text.startswith('!parse'):
+        parse_all(boot)
+    elif channel == boot.config['nick']:
+        #pm'ing with bot
+        if sender.host == 'wikipedia/Legoktm':
+            chan = text.split(' ')[0]
+            real_text = ' '.join(text.split(' ')[1:])
+            boot.queue_msg(chan, real_text)
+    elif text.startswith('!clear'):
+        boot.cache.set('aiv', [])
+    elif text.startswith('!info'):
+        username = ' '.join(text.split(' ')[1:])
+        for line in all_info(username):
+            boot.queue_msg(None, line)

@@ -1,18 +1,9 @@
 #!/usr/bin/env python
 from __future__ import unicode_literals
-import cache
 import mwparserfromhell
 import pywikibot
-import Queue
-import re
 
 from mtirc import bot
-from mtirc import settings
-
-config = settings.config
-config['nick'] = 'UfAA'
-config['debug'] = False
-config['cache_file'] = 'ufaa'
 
 pages = ['Wikipedia:Usernames for administrator attention',
          'Wikipedia:Usernames for administrator attention/Bot',
@@ -22,14 +13,21 @@ AIVbots = ['HBC AIV helperbot7',
            'HBC AIV helperbot5',
            ]
 
-mc = cache.Cache(config)
-mc.set('uaa', [])
 site = pywikibot.Site('en', 'wikipedia')
 #template = re.compile('\{\{(?P<template>([Ii][Pp])?[Vv]andal)\|(?P<user>.*?)\}\}')
 templates = ['user-uaa']
 
 
-def parse(page, rcv):
+def run(**kw):
+    if kw['server'] == 'irc.wikimedia.org':
+        rc_hit(bot.parse_edit(kw['text']), kw['text'], kw['bot'])
+    else:
+        on_msg(kw['channel'], kw['text'], kw['sender'], kw['bot'])
+
+    return True
+
+
+def parse(page):
     #page: page that got updated
     #push: push queue to send a message
     pg = pywikibot.Page(site, page)
@@ -42,53 +40,39 @@ def parse(page, rcv):
     s = list(s)
     return s
 
-def parse_all(rcv):
+
+def parse_all(boot):
     l = []
     for page in pages:
-        l += parse(page, rcv)
+        l += parse(page)
     l = list(set(l))
-    mc.set('uaa', l)
-    rcv.debug(l)
+    boot.cache.set('uaa', l)
 
 
-class RcvThread(bot.ReceiveThread):
-    def parse(self, channel, text, sender):
-        if channel == '#en.wikipedia':
-            self.rc_hit(bot.parse_edit(text), text)
-        else:
-            self.on_msg(channel, text, sender)
+def rc_hit(diff, raw, boot):
+    if 'page' in diff and diff['page'] in pages:
+        if not diff['user'] in AIVbots:
+            boot.queue_msg(None, raw)
+        parse_all(boot)
+    elif 'log' in diff and diff['log'] == 'block':
+        #self.pull.put((None, raw))
+        for user in boot.cache.get('uaa'):
+            if diff['summary'].startswith('blocked User:{0}'.format(user)):
+                boot.queue_msg(None, raw)
+    elif diff['user'] in boot.cache.get('uaa'):
+        boot.queue_msg(None, raw)
+        #print repr(diff['summary'])
 
-    def rc_hit(self, diff, raw):
-        if 'page' in diff and diff['page'] in pages:
-            if not diff['user'] in AIVbots:
-                self.pull.put((None, raw))
-            parse_all(self)
-        elif 'log' in diff and diff['log'] == 'block':
-            #self.pull.put((None, raw))
-            for user in mc.get('uaa'):
-                if diff['summary'].startswith('blocked User:{0}'.format(user)):
-                    self.pull.put((None, raw))
-        elif diff['user'] in mc.get('uaa'):
-            self.pull.put((None, raw))
-            #print repr(diff['summary'])
 
-    def on_msg(self, channel, text, sender):
-        print text
-        if text.startswith('!ping'):
-            self.pull.put((channel, 'pong'))
-        elif text.startswith('!parse'):
-            parse_all(self)
-        elif channel == config['nick']:
-            #pm'ing with bot
-            if sender.host == 'wikipedia/Legoktm':
-                chan = text.split(' ')[0]
-                real_text = ' '.join(text.split(' ')[1:])
-                self.pull.put((chan, real_text))
-        elif text.startswith('!clear'):
-            mc.set('uaa', [])
-
-push = Queue.Queue()
-pull = Queue.Queue()
-pull.put((None, 'Hello, I am a bot tracking https://en.wikipedia.org/wiki/Wikipedia:UAA'))
-b = bot.Bot(push, pull, RcvThread, config)
-b.run()
+def on_msg(channel, text, sender, boot):
+    print text
+    if text.startswith('!parse'):
+        parse_all(boot)
+    elif channel == boot.config['nick']:
+        #pm'ing with bot
+        if sender.host == 'wikipedia/Legoktm':
+            chan = text.split(' ')[0]
+            real_text = ' '.join(text.split(' ')[1:])
+            boot.queue_msg(chan, real_text)
+    elif text.startswith('!clear'):
+        boot.cache.set('uaa', [])
