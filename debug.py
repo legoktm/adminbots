@@ -27,7 +27,7 @@ def run(**kw):
     if kw['text'].startswith('!connections'):
         kw['bot'].queue_msg(None, unicode(kw['bot'].config['connections']))
     elif kw['text'].startswith('!modules'):
-        kw['bot'].queue_msg(None, 'The following modules'
+        kw['bot'].queue_msg(None, 'The following modules '
                                   'are loaded: ' +
                                   ', '.join(kw['bot'].config['modules'].keys()
                                             )
