@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-from __future__ import unicode_literals
 """
 Copyright (C) 2013 Legoktm
 
@@ -22,31 +21,15 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE.
 """
 
-import private
-from mtirc import bot
-from mtirc import settings
+# A quick debugging module
 
-import ufaa
-import aiv
-import debug
-
-config = settings.config
-
-config['nick'] = 'leeeeeeeegobot'
-config['connections']['card.freenode.net']['channels'] = ['##legoktm-bots', '##legoktm-bots-chatter']
-config['connections']['irc.wikimedia.org'] = {'channels': ['#en.wikipedia',
-                                                           ],
-                                              'authenticate': False,
-                                              }
-config['default_channel'] = '##legoktm-bots'
-config['modules']['ufaa'] = ufaa.run
-config['modules']['aiv'] = aiv.run
-config['modules']['debug'] = debug.run
-config['authenticate'] = True
-config['ns_username'] = 'legobot'
-config['ns_pw'] = private.ns_pw
-
-b = bot.Bot(config)
-b.cache.set('uaa', [])
-b.cache.set('aiv', [])
-b.run()
+def run(**kw):
+    if kw['text'].startswith('!connections'):
+        kw['bot'].queue_msg(None, unicode(kw['bot'].config['connections']))
+    elif kw['text'].starswith('!modules'):
+        kw['bot'].queue_msg(None, 'The following modules'
+                                  'are loaded: ' +
+                                  ', '.join(kw['bot'].config['modules'].keys()
+                                  )
+        )
+    return True
