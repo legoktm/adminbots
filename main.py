@@ -29,6 +29,7 @@ from mtirc import settings
 import ufaa
 import aiv
 import debug
+import IPdata
 
 config = settings.config
 
@@ -42,6 +43,7 @@ config['default_channel'] = '##legoktm-bots'
 config['modules']['ufaa'] = ufaa.run
 config['modules']['aiv'] = aiv.run
 config['modules']['debug'] = debug.run
+config['modules']['ipdata'] = IPdata.run
 config['authenticate'] = True
 config['ns_username'] = 'legobot'
 config['ns_pw'] = private.ns_pw
