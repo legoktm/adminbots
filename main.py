@@ -30,6 +30,7 @@ import ufaa
 import aiv
 import debug
 import IPdata
+import stalker
 
 config = settings.config
 
@@ -44,6 +45,7 @@ config['modules']['ufaa'] = ufaa.run
 config['modules']['aiv'] = aiv.run
 config['modules']['debug'] = debug.run
 config['modules']['ipdata'] = IPdata.run
+config['modules']['stalker'] = stalker.run
 config['authenticate'] = True
 config['ns_username'] = 'legobot'
 config['ns_pw'] = private.ns_pw
