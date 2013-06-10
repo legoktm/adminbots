@@ -33,6 +33,8 @@ commands = ('!info', '!rdns', '!geolocation')
 
 
 def run(**kw):
+    if kw['server'] == 'irc.wikimedia.org':
+        return True
     if not kw['text'].startswith(commands):
         return True
     sp = kw['text'].split(' ')
