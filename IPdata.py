@@ -52,8 +52,6 @@ def run(**kw):
     return True
 
 
-
-
 def get_data(ip, bot):
     h = _hash(ip)
     if not h in bot.cache:
@@ -64,26 +62,9 @@ def get_data(ip, bot):
     return data
 
 
-
 def old_rDNS(ip):
     data = sh.dig('-x' , ip)
     return ['rDNS: ' + data.splitlines()[11].split('\t')[-1][:-1]]
-
-#http://ip-api.com/json/122.111.244.202
-#{"status":"success",
-# "country":"Australia",
-# "countryCode":"AU",
-# "region":"08",
-# "regionName":"Western Australia",
-# "city":"Perth",
-# "zip":"",
-# "lat":"-31.9522","lon":"115.8614",
-# "timezone":"Australia\/Perth",
-# "isp":"Optus",
-# "org":"Optus",
-# "as":"AS4804 Microplex PTY LTD",
-# "reverse":"d122-111-244-202.per801.wa.optusnet.com.au",
-# "query":"122.111.244.202"}
 
 
 def fetch_info(ip):
@@ -96,6 +77,7 @@ def rDNS(data):
         return ['rDNS: {reverse}'.format(**data)]
     else:
         return ['rDNS: API did not provide info.']
+
 
 def geolocate(data):
     return ['Location: {city}, {regionName}, {country}. ISP: {isp}.'.format(**data)]
