@@ -92,7 +92,10 @@ def fetch_info(ip):
 
 
 def rDNS(data):
-    return ['rDNS: {reverse}'.format(**data)]
+    if data['reverse']:
+        return ['rDNS: {reverse}'.format(**data)]
+    else:
+        return ['rDNS: API did not provide info.']
 
 def geolocate(data):
     return ['Location: {city}, {regionName}, {country}. ISP: {isp}.'.format(**data)]
