@@ -23,9 +23,17 @@ IN THE SOFTWARE.
 
 # A quick debugging module
 
+import json
+
+
 def run(**kw):
     if kw['text'].startswith('!connections'):
-        kw['bot'].queue_msg(None, unicode(kw['bot'].config['connections']))
+        # lets clone it
+        connections = dict(kw['bot'].config['connections'])
+        for c in connections:
+            if 'ns_pw' in connections[c]:
+                del connections[c]['ns_pw']
+        kw['bot'].queue_msg(None, json.dumps(connections))
     elif kw['text'].startswith('!modules'):
         kw['bot'].queue_msg(None, 'The following modules '
                                   'are loaded: ' +
