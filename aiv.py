@@ -159,6 +159,7 @@ def run(**kw):
         rc_hit(bot.parse_edit(kw['text']), kw['text'], kw['bot'])
     else:
         on_msg(kw['channel'], kw['text'], kw['sender'], kw['bot'])
+    return True
 
 def rc_hit(diff, raw, boot):
     if 'page' in diff and diff['page'] in pages:
