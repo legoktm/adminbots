@@ -48,7 +48,7 @@ def run(**kw):
     if command in ['!info', '!geolocation']:
         f += geolocate(data)
     for line in f:
-        kw['bot'].queue_msg(None, line)
+        kw['bot'].queue_msg(kw['channel'], line)
     return True
 
 
