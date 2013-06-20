@@ -23,18 +23,13 @@ IN THE SOFTWARE.
 #jstart -N uaa -mem 2G /data/project/legobot/irclib/bin/python /data/project/legobot/adminbots/ufaa.py
 import os
 import subprocess
-import sys
-
-from mtirc import settings
 
 environ = os.environ
 environ['PATH'] = '/bin:/usr/bin:/usr/local/bin'
-program = sys.argv[1]
-mem = settings.config['memory'].get(program, '800M')
 run = subprocess.call('jstart '
-                      '-N {0} '
-                      '-mem {1} '
+                      '-N main '
+                      '-mem 800M '
                       '/data/project/legobot/irclib/bin/python '
-                      '/data/project/legobot/adminbots/{0}.py'.format(program, mem),
+                      '/data/project/legobot/adminbots/main.py',
                       stderr=subprocess.STDOUT, shell=True, env=environ)
 
