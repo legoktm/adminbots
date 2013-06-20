@@ -68,7 +68,7 @@ def run(**kw):
             d = dict(CACHE['stalk_these'])
             if username in d:
                 del d[username]
-                kw['bot'].queue_msg(kw['channel'], 'Added to stalk list.')
+                kw['bot'].queue_msg(kw['channel'], 'Removed from stalk list.')
             else:
                 kw['bot'].queue_msg(kw['channel'], 'User was not on stalk list.')
             CACHE['stalk_these'] = d
