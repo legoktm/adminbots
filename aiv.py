@@ -186,5 +186,5 @@ def on_msg(channel, text, sender, boot):
         boot.cache.set('aiv', [])
     elif text.startswith('!info'):
         username = ' '.join(text.split(' ')[1:])
-        for line in all_info(username, bot):
+        for line in all_info(username, boot):
             boot.queue_msg(channel, line)
