@@ -63,6 +63,15 @@ def run(**kw):
                 d[username] = [kw['channel']]
             CACHE['stalk_these'] = d
             kw['bot'].queue_msg(kw['channel'], 'Added to stalk list.')
+        elif kw['text'].startswith('!unstalk'):
+            username = ' '.join(kw['text'].split(' ')[1:])
+            d = dict(CACHE['stalk_these'])
+            if username in d:
+                del d[username]
+                kw['bot'].queue_msg(kw['channel'], 'Added to stalk list.')
+            else:
+                kw['bot'].queue_msg(kw['channel'], 'User was not on stalk list.')
+            CACHE['stalk_these'] = d
     elif kw['server'] == 'irc.wikimedia.org':
         edit = bot.parse_edit(kw['text'])
         if edit['user'] in CACHE['stalk_these']:
