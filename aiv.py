@@ -174,9 +174,7 @@ def rc_hit(diff, raw, boot):
 
 def on_msg(channel, text, sender, boot):
     print text
-    if text.startswith('!ping'):
-        boot.queue_msg(channel, 'pong')
-    elif text.startswith('!parse'):
+    if text.startswith('!parse'):
         parse_all(boot)
     elif channel == boot.config['nick']:
         #pm'ing with bot
