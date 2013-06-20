@@ -25,8 +25,8 @@ IN THE SOFTWARE.
 import mwparserfromhell
 import pywikibot
 from pywikibot.data import api
-import sh
 import urllib
+import IPdata
 
 from mtirc import bot
 
@@ -76,8 +76,8 @@ def parse_all(boot, by_bot=False):
     print l
 
 
-def all_info(username):
-    return user_info(username) + block_info(username) + af_info(username)
+def all_info(username, bot):
+    return user_info(username, bot) + block_info(username) + af_info(username)
 
 
 def block_info(username):
@@ -108,7 +108,7 @@ def block_info(username):
     return text
 
 
-def user_info(username):
+def user_info(username, bot):
     text = ['[[User:{0}]]: https://en.wikipedia.org/wiki/Special:Contributions/{1}'.format(
         username, urllib.quote_plus(username.replace(' ', '_').encode('utf-8')))]
     #&list=users&ususers=Legoktm&usprop=blockinfo|groups|editcount|registration&format=jsonfm
@@ -124,7 +124,8 @@ def user_info(username):
     if 'missing' in data:
         return text
     elif 'invalid' in data:  # IP address
-        return text + rDNS(username)
+        data = IPdata.get_data(username, bot)
+        return text + IPdata.rDNS(data) + IPdata.geolocate(data)
     text.append('editcount: {0}'.format(data['editcount']))
     text.append('userrights: {0}'.format(', '.join(data['groups'])))
     if 'blockid' in data:
@@ -146,11 +147,6 @@ def af_info(username):
     if count:
         l.append('af hits: {0}'.format(count))
     return l
-
-
-def rDNS(ip):
-    data = sh.dig('-x' , ip)
-    return ['rDNS: ' + data.splitlines()[11].split('\t')[-1][:-1]]
 
 
 def run(**kw):
@@ -192,5 +188,5 @@ def on_msg(channel, text, sender, boot):
         boot.cache.set('aiv', [])
     elif text.startswith('!info'):
         username = ' '.join(text.split(' ')[1:])
-        for line in all_info(username):
+        for line in all_info(username, bot):
             boot.queue_msg(channel, line)
