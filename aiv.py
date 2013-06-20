@@ -31,7 +31,6 @@ import urllib
 from mtirc import bot
 
 
-
 pages = ['Wikipedia:Administrator intervention against vandalism',
          'Wikipedia:Administrator intervention against vandalism/TB2',
          #'User:Legoktm/test',
@@ -175,6 +174,7 @@ def rc_hit(diff, raw, boot):
     elif diff['user'] in boot.cache.get('aiv'):
         boot.queue_msg(None, raw)
         #print repr(diff['summary'])
+
 
 def on_msg(channel, text, sender, boot):
     print text

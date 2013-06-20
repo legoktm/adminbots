@@ -63,7 +63,7 @@ def get_data(ip, bot):
 
 
 def old_rDNS(ip):
-    data = sh.dig('-x' , ip)
+    data = sh.dig('-x', ip)
     return ['rDNS: ' + data.splitlines()[11].split('\t')[-1][:-1]]
 
 
