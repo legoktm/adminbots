@@ -29,7 +29,7 @@ import sh
 def _hash(a):
     return hashlib.md5(a).hexdigest()
 
-commands = ('!info', '!rdns', '!geolocation')
+commands = ('!rdns', '!geolocation')  # !info is called by aiv.py
 
 
 def run(**kw):
@@ -43,9 +43,9 @@ def run(**kw):
     # TODO: Some kind of IP address validation should be here
     data = get_data(ip, kw['bot'])
     f = []
-    if command in ['!info', '!rdns']:
+    if command in ['!rdns']:  # !info is called by aiv.py
         f += rDNS(data)
-    if command in ['!info', '!geolocation']:
+    if command in ['!geolocation']:  # !info is called by aiv.py
         f += geolocate(data)
     for line in f:
         kw['bot'].queue_msg(kw['channel'], line)
