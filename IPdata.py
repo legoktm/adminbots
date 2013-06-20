@@ -76,7 +76,7 @@ def rDNS(data):
     if data['reverse']:
         return ['rDNS: {reverse}'.format(**data)]
     else:
-        return ['rDNS: API did not provide info.']
+        return old_rDNS(data['query'])
 
 
 def geolocate(data):
