@@ -73,7 +73,6 @@ def parse_all(boot, by_bot=False):
     boot.cache.set('aiv', l)
     if by_bot and l:
         boot.queue_msg(None, 'There are {0} requests on AIV.'.format(len(l)))
-    print l
 
 
 def all_info(username, bot):
@@ -120,7 +119,6 @@ def user_info(username, bot):
     req = api.Request(**params)
     data = req.submit()
     data = data['query']['users'][0]
-    print data
     if 'missing' in data:
         return text
     elif 'invalid' in data:  # IP address
@@ -173,7 +171,6 @@ def rc_hit(diff, raw, boot):
 
 
 def on_msg(channel, text, sender, boot):
-    print text
     if text.startswith('!parse'):
         parse_all(boot)
     elif channel == boot.config['nick']:
