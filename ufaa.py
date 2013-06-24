@@ -5,6 +5,9 @@ import pywikibot
 
 from mtirc import bot
 
+pywikibot.config.maxlag = 9999
+
+
 pages = ['Wikipedia:Usernames for administrator attention',
          'Wikipedia:Usernames for administrator attention/Bot',
          #'User:Legoktm/test',

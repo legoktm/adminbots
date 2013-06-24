@@ -6,6 +6,9 @@ import pywikibot
 import Queue
 import re
 
+pywikibot.config.maxlag = 9999
+
+
 from mtirc import bot
 from mtirc import settings
 

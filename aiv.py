@@ -30,6 +30,8 @@ import IPdata
 
 from mtirc import lib
 
+pywikibot.config.maxlag = 9999
+
 
 pages = ['Wikipedia:Administrator intervention against vandalism',
          'Wikipedia:Administrator intervention against vandalism/TB2',
