@@ -68,7 +68,7 @@ def parse_all(boot, by_bot=False):
     old = boot.cache.get('aiv')
     for c in l:
         if not c in old:
-            info = all_info(c)
+            info = all_info(c, boot)
             for m in info:
                 boot.queue_msg(None, m)
 
