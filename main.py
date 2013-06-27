@@ -26,11 +26,12 @@ import private
 from mtirc import bot
 from mtirc import settings
 
-import ufaa
 import aiv
 import debug
 import IPdata
+import rfpp
 import stalker
+import ufaa
 
 config = settings.config
 
@@ -46,6 +47,7 @@ config['modules']['aiv'] = aiv.run
 config['modules']['debug'] = debug.run
 config['modules']['ipdata'] = IPdata.run
 config['modules']['stalker'] = stalker.run
+config['modules']['rfpp'] = rfpp.parse
 config['authenticate'] = True
 config['ns_username'] = 'legobot'
 config['ns_pw'] = private.ns_pw
