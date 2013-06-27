@@ -55,4 +55,5 @@ config['ns_pw'] = private.ns_pw
 b = bot.Bot(config)
 b.cache.set('uaa', [])
 b.cache.set('aiv', [])
+b.cache.set('rfpp', [])
 b.run()
