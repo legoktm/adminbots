@@ -68,7 +68,7 @@ def rc_hit(boot, diff, raw):
     elif 'log' in diff and diff['log'] == 'protect':
         #self.pull.put((None, raw))
         #print repr(diff['summary'])
-        for title in mc.get('rfpp'):
+        for title in boot.cache.get('rfpp'):
             if diff['summary'].startswith('protected {0}'.format(title)):
                 boot.queue_msg(None, raw)
     elif 'page' in diff and diff['page'] in boot.cache.get('rfpp'):
