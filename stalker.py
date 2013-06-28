@@ -48,7 +48,7 @@ def run(**kw):
     if kw['server'] == 'card.freenode.net':
         if kw['text'].startswith(kw['bot'].config['nick'] + ': !join'):
             if kw['sender'].host == 'wikipedia/Legoktm':
-                channel = kw['text'].split(' ')[1]
+                channel = kw['text'].split(' ')[2]
                 kw['bot'].servers[kw['server']].join(channel)
                 t = list(CACHE['channels'])
                 t.append(channel)
@@ -56,7 +56,7 @@ def run(**kw):
                 kw['bot'].queue_msg(kw['channel'], 'If you say so.')
         elif kw['text'].startswith(kw['bot'].config['nick'] + ': !part'):
             if kw['sender'].host == 'wikipedia/Legoktm':
-                channel = kw['text'].split(' ')[1]
+                channel = kw['text'].split(' ')[2]
                 if channel in CACHE['channels']:
                     t = list(CACHE['channels'])
                     t.remove(channel)
