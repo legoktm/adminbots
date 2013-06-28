@@ -46,7 +46,7 @@ def run(**kw):
         for c in CACHE['channels']:
             kw['bot'].servers[kw['server']].join(c)
     if kw['server'] == 'card.freenode.net':
-        if kw['text'].startswith('!join'):
+        if kw['text'].startswith(kw['bot'].config['nick'] + ': !join'):
             if kw['sender'].host == 'wikipedia/Legoktm':
                 channel = kw['text'].split(' ')[1]
                 kw['bot'].servers[kw['server']].join(channel)
@@ -54,7 +54,19 @@ def run(**kw):
                 t.append(channel)
                 CACHE['channels'] = t
                 kw['bot'].queue_msg(kw['channel'], 'If you say so.')
-        elif kw['text'].startswith('!stalk'):
+        elif kw['text'].startswith(kw['bot'].config['nick'] + ': !part'):
+            if kw['sender'].host == 'wikipedia/Legoktm':
+                channel = kw['text'].split(' ')[1]
+                if channel in CACHE['channels']:
+                    t = list(CACHE['channels'])
+                    t.remove(channel)
+                    CACHE['channels'] = t
+                    kw['bot'].send_msg(kw['channel'], 'Byeeee!')  # Jump the queue so the message gets sent
+                    kw['bot'].servers[kw['server']].part(channel)
+                else:
+                    kw['bot'].queue_msg(kw['channel'], 'I\'m currently not in that channel.')
+
+        elif kw['text'].startswith(kw['bot'].config['nick'] + ': !stalk'):
             username = ' '.join(kw['text'].split(' ')[1:])
             d = dict(CACHE['stalk_these'])
             if username in d:
@@ -63,7 +75,7 @@ def run(**kw):
                 d[username] = [kw['channel']]
             CACHE['stalk_these'] = d
             kw['bot'].queue_msg(kw['channel'], 'Added to stalk list.')
-        elif kw['text'].startswith('!unstalk'):
+        elif kw['text'].startswith(kw['bot'].config['nick'] + ': !unstalk'):
             username = ' '.join(kw['text'].split(' ')[1:])
             d = dict(CACHE['stalk_these'])
             if username in d:
