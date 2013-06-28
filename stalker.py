@@ -84,6 +84,9 @@ def run(**kw):
             else:
                 kw['bot'].queue_msg(kw['channel'], 'User was not on stalk list.')
             CACHE['stalk_these'] = d
+        elif kw['text'].startswith('!channels'):
+            if kw['sender'].host == 'wikipedia/Legoktm':
+                kw['bot'].queue_msg('I am in ' + ', '.join(CACHE['channels']))
     elif kw['server'] == 'irc.wikimedia.org':
         edit = bot.parse_edit(kw['text'])
         if edit['user'] in CACHE['stalk_these']:
