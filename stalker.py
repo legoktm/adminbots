@@ -61,7 +61,7 @@ def run(**kw):
                     t = list(CACHE['channels'])
                     t.remove(channel)
                     CACHE['channels'] = t
-                    kw['bot'].send_msg(kw['channel'], 'Byeeee!')  # Jump the queue so the message gets sent
+                    kw['bot'].send_msg({'channel': kw['channel'], 'text': 'Byeeee!'})  # Jump the queue so the message gets sent
                     kw['bot'].servers[kw['server']].part(channel)
                 else:
                     kw['bot'].queue_msg(kw['channel'], 'I\'m currently not in that channel.')
