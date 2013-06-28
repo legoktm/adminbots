@@ -45,7 +45,6 @@ def parse_hit(page, boot):
     s = list(s)
     boot.cache.set('rfpp', s)
     boot.debug(s)
-    print s
 
 
 def parse_all(boot):
@@ -77,7 +76,6 @@ def rc_hit(boot, diff, raw):
 
 
 def on_msg(boot, channel, text, sender):
-    print text
     if text.startswith('!parse'):
         parse_all(boot)
     elif channel == boot.config['nick']:
