@@ -29,6 +29,7 @@ from mtirc import settings
 import aiv
 import debug
 import IPdata
+import newpages
 import rfpp
 import stalker
 import ufaa
@@ -46,6 +47,7 @@ config['modules']['ufaa'] = ufaa.run
 config['modules']['aiv'] = aiv.run
 config['modules']['debug'] = debug.run
 config['modules']['ipdata'] = IPdata.run
+config['modules']['newpages'] = newpages.run
 config['modules']['stalker'] = stalker.run
 config['modules']['rfpp'] = rfpp.parse
 config['authenticate'] = True
