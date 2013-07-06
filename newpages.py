@@ -44,6 +44,8 @@ def run(**kw):
     if (kw['server'] != 'irc.wikimedia.org') or (kw['channel'] != '#en.wikipedia'):
         return
     edit = lib.parse_edit(kw['text'])
+    if 'log' in edit:
+        return
     if edit['new'] == 'N' and edit['patrolled'] == '!':
         if ':' in edit['page']:
             if edit['page'].split(':', 1)[0] in namespaces:
