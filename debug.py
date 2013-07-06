@@ -33,9 +33,9 @@ def run(**kw):
         for c in connections:
             if 'ns_pw' in connections[c]:
                 del connections[c]['ns_pw']
-        kw['bot'].queue_msg(None, json.dumps(connections))
+        kw['bot'].queue_msg(kw['channel'], json.dumps(connections))
     elif kw['text'].startswith('!modules'):
-        kw['bot'].queue_msg(None, 'The following modules '
+        kw['bot'].queue_msg(kw['channel'], 'The following modules '
                                   'are loaded: ' +
                                   ', '.join(kw['bot'].config['modules'].keys()
                                             )
