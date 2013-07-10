@@ -37,6 +37,7 @@ import ufaa
 config = settings.config
 
 config['nick'] = 'legobot'
+config['disable_on_errors'] = False  # aiv.py has issues
 config['connections']['card.freenode.net']['channels'] = ['##legoktm-bots', '##legoktm-bots-chatter']
 config['connections']['irc.wikimedia.org'] = {'channels': ['#en.wikipedia',
                                                            ],
