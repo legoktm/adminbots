@@ -54,7 +54,10 @@ config['modules']['rfpp'] = rfpp.parse
 config['authenticate'] = True
 config['ns_username'] = 'legobot'
 config['ns_pw'] = private.ns_pw
-config['mc_host'] = 'tools-mc'
+
+#Cache
+config['cache']['type'] = settings.CACHE_REDIS
+config['cache']['host'] = 'tools-mc'
 
 b = bot.Bot(config)
 b.cache.set('uaa', [])

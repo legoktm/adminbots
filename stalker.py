@@ -29,10 +29,10 @@ from mtirc import cache
 # so lets set up a new instance
 
 config = dict(settings.config)
-config['use_memcache'] = False
-config['cache_file'] = 'stalker'
+config['cache']['type'] = settings.CACHE_PICKLE
+config['cache']['file'] = 'stalker'
 
-CACHE = cache.Cache(config)
+CACHE = cache.Cache(config['cache'])
 CACHE['loaded'] = False
 if not 'stalk_these' in CACHE:
     CACHE['stalk_these'] = {}
