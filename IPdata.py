@@ -80,4 +80,4 @@ def rDNS(data):
 
 
 def geolocate(data):
-    return ['Location: {city}, {regionName}, {country}. ISP: {isp}.'.format(**data)]
+    return [u'Location: {city}, {regionName}, {country}. ISP: {isp}.'.format(**data)]
