@@ -57,7 +57,7 @@ config['ns_pw'] = private.ns_pw
 
 #Cache
 config['cache']['type'] = settings.CACHE_REDIS
-config['cache']['host'] = 'tools-mc'
+config['cache']['host'] = 'tools-redis'
 
 b = bot.Bot(config)
 b.cache.set('uaa', [])
