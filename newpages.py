@@ -24,6 +24,7 @@ IN THE SOFTWARE.
 from __future__ import unicode_literals
 
 from mtirc import lib
+from mtirc import hooks
 
 #TODO: Pull this list automatically
 namespaces = ('Talk', 'User', 'User talk', 'Wikipedia', 'Wikipedia talk',
@@ -37,10 +38,6 @@ channel = '##legoktm-newpages'
 
 
 def run(**kw):
-    global joined
-    if not joined:
-        kw['bot'].servers['card.freenode.net'].join(channel)
-        joined = True
     if (kw['server'] != 'irc.wikimedia.org') or (kw['channel'] != '#en.wikipedia'):
         return
     edit = lib.parse_edit(kw['text'])
@@ -52,3 +49,8 @@ def run(**kw):
                 #not mainspace
                 return
         kw['bot'].queue_msg(channel, kw['text'])
+
+def join(**kw):
+    kw['bot'].servers['card.freenode.net'].join(channel)
+
+hooks.add_hook('connected', 'newpages', join)

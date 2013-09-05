@@ -22,6 +22,7 @@ IN THE SOFTWARE.
 """
 
 from mtirc import bot
+from mtirc import hooks
 from mtirc import settings
 from mtirc import cache
 
@@ -38,6 +39,13 @@ if not 'stalk_these' in CACHE:
     CACHE['stalk_these'] = {}
 if not 'channels' in CACHE:
     CACHE['channels'] = []
+
+
+def init(**kw):
+    for c in CACHE['channels']:
+        kw['bot'].servers['card.freenode.net'].join(c)
+
+hooks.add_hook('connected', 'stalker', init)
 
 
 def run(**kw):
