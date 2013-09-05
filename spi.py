@@ -30,7 +30,7 @@ channel = '#wikipedia-en-spi'
 def init(**kw):
     kw['bot'].servers['card.freenode.net'].join(channel)
 
-hooks.add_hook('connected', 'stalker', init)
+hooks.add_hook('connected', 'spi', init)
 
 pages = [
     'Wikipedia:Sockpuppet investigations',
