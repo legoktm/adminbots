@@ -31,6 +31,7 @@ import debug
 import IPdata
 import newpages
 import rfpp
+import spi
 import stalker
 import ufaa
 
@@ -49,6 +50,7 @@ config['modules']['aiv'] = aiv.run
 config['modules']['debug'] = debug.run
 config['modules']['ipdata'] = IPdata.run
 config['modules']['newpages'] = newpages.run
+config['modules']['spi'] = spi.run
 config['modules']['stalker'] = stalker.run
 config['modules']['rfpp'] = rfpp.parse
 config['authenticate'] = True
