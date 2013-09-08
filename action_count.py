@@ -36,13 +36,12 @@ WHERE """
         query += 'log_type = ?'
     query += '\nAND user_name = ?;'
 
-    with db.connect(dbname) as conn:
-        with conn.cursor() as cur:
-            cur.execute(query, (action, username))
-            count = cur.fetchone()[0]
+    with db.connect(dbname) as cur:
+        cur.execute(query, (action, username))
+        count = cur.fetchone()[0]
 
     kw['bot'].queue_msg(kw['channel'], '{0}@{1} has {2} {3} of type {4}'.format(
-        username, dbname, count, human, type_
+        username, dbname, count, human, action
     ))
     return True
 
