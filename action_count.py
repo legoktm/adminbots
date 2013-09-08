@@ -15,7 +15,7 @@ def on_msg(**kw):
         kw['bot'].queue_msg(kw['channel'], '!(a|l) log_action username[@dbname]')
     type_ = sp[0][1]
     action = sp[1]
-    username = sp[2]
+    username = ' '.join(sp[2:])
     if '@' in username:
         dbname = username.split('@', 1)[1]
         username = username.split('@', 1)[0]
