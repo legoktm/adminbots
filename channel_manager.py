@@ -4,9 +4,10 @@
 
 # Assists with joining/parting channels
 
+import os
 import yaml
 from mtirc import hooks
-filename = 'channels.yml'
+filename = os.path.expanduser('~/channels.yml')
 
 
 def get_channel_list():
