@@ -26,7 +26,9 @@ import private
 from mtirc import bot
 from mtirc import settings
 
+import action_count
 import aiv
+import channel_manager
 import debug
 import IPdata
 import newpages
