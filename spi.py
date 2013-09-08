@@ -45,10 +45,12 @@ ignorepages = [
     'Wikipedia:Sockpuppet investigations/Cases/Overview',
 ]
 
+
 def run(**kw):
     if kw['server'] == 'irc.wikimedia.org':
         edit = bot.parse_edit(kw['text'])
-        if edit['page'].startswith(tuple(pages)) and \
+        if 'page' in edit and \
+                edit['page'].startswith(tuple(pages)) and \
                 not (edit['page'] in ignorepages) and \
                 not (edit['user'] in ignoreuser):
                 kw['bot'].queue_msg(channel, kw['text'])
