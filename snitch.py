@@ -102,6 +102,12 @@ class SnitchBot:
             #f.write(dump)
             json.dump(data, f, sort_keys=True, indent=4, separators=(',', ': '))
 
+    def match(self, pattern, other):
+        """
+        Simple helper function for re.match
+        """
+        return re.match('^{0}$'.format(pattern), other)
+
     def matches_rulset(self, ruleset, hit):
         """
         hit is a dict, returned by mtirc.lib.parse_edit
@@ -109,18 +115,18 @@ class SnitchBot:
         """
         notify = set()
         for user in ruleset['user']:
-            if re.match(user, hit['user']):
+            if self.match(user, hit['user']):
                 notify = notify.union(set(ruleset['user'][user]))
         for summary in ruleset['summary']:
-            if re.match(summary, hit['summary']):
+            if self.match(summary, hit['summary']):
                 notify = notify.union(set(ruleset['page'][summary]))
         if 'page' in hit:
             for page in ruleset['page']:
-                if re.match(page, hit['page']):
+                if self.match(page, hit['page']):
                     notify = notify.union(set(ruleset['page'][page]))
         if 'log' in hit:
             for log in ruleset['log']:
-                if re.match(log, hit['log']):
+                if self.match(log, hit['log']):
                     notify = notify.union(set(ruleset['log'][log]))
         return notify
 
