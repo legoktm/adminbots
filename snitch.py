@@ -113,22 +113,22 @@ class SnitchBot:
         hit is a dict, returned by mtirc.lib.parse_edit
         returns a list of channels to notify
         """
-        notify = set()
+        notify = list()
         for user in ruleset['user']:
             if self.match(user, hit['user']):
-                notify = notify.union(set(ruleset['user'][user]))
+                notify.extend(ruleset['user'][user])
         for summary in ruleset['summary']:
             if self.match(summary, hit['summary']):
-                notify = notify.union(set(ruleset['page'][summary]))
+                notify.extend(ruleset['page'][summary])
         if 'page' in hit:
             for page in ruleset['page']:
                 if self.match(page, hit['page']):
-                    notify = notify.union(set(ruleset['page'][page]))
+                    notify.extend(ruleset['page'][page])
         if 'log' in hit:
             for log in ruleset['log']:
                 if self.match(log, hit['log']):
-                    notify = notify.union(set(ruleset['log'][log]))
-        return notify
+                    notify.extend(ruleset['log'][log])
+        return set(notify)
 
     def add_rule(self, rc_channel, action, subtype, regex, channel):
         """
