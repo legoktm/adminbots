@@ -23,6 +23,12 @@ IN THE SOFTWARE.
 #jstart -N uaa -mem 2G /data/project/legobot/irclib/bin/python /data/project/legobot/adminbots/ufaa.py
 import os
 import subprocess
+import sys
+
+if 'snitch' in sys.argv:
+    script = 'snitch.py'
+else:
+    script = 'main.py'
 
 environ = os.environ
 environ['PATH'] = '/bin:/usr/bin:/usr/local/bin'
@@ -30,6 +36,6 @@ run = subprocess.call('jstart '
                       '-N main '
                       '-mem 800M '
                       '/data/project/legobot/irclib/bin/python '
-                      '/data/project/legobot/adminbots/main.py',
+                      '/data/project/legobot/adminbots/{0}'.format(script),
                       stderr=subprocess.STDOUT, shell=True, env=environ)
 
