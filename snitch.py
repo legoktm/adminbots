@@ -139,6 +139,7 @@ class SnitchBot:
             data[rc_channel] = blank
         if regex in data[rc_channel][action][subtype]:
             if channel in data[rc_channel][action][subtype][regex]:
+                self.lock.release()
                 return False
             data[rc_channel][action][subtype][regex].append(channel)
         else:
@@ -160,6 +161,7 @@ class SnitchBot:
         self.lock.acquire()
         data = self.read()
         if not rc_channel in data:
+            self.lock.release()
             return False
         if regex in data[rc_channel][action][subtype]:
             if channel in data[rc_channel][action][subtype][regex]:
@@ -168,8 +170,10 @@ class SnitchBot:
                     # Remove empty rules
                     data[rc_channel][action][subtype].remove(regex)
             else:
+                self.lock.release()
                 return False
         else:
+            self.lock.release()
             return False
 
         self.write(data)
