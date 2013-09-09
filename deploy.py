@@ -26,16 +26,16 @@ import subprocess
 import sys
 
 if 'snitch' in sys.argv:
-    script = 'snitch.py'
+    script = 'snitch'
 else:
-    script = 'main.py'
+    script = 'main'
 
 environ = os.environ
 environ['PATH'] = '/bin:/usr/bin:/usr/local/bin'
 run = subprocess.call('jstart '
-                      '-N main '
+                      '-N {0} '.format(script)
                       '-mem 800M '
                       '/data/project/legobot/irclib/bin/python '
-                      '/data/project/legobot/adminbots/{0}'.format(script),
+                      '/data/project/legobot/adminbots/{0}.py'.format(script),
                       stderr=subprocess.STDOUT, shell=True, env=environ)
 
