@@ -53,4 +53,4 @@ def run(**kw):
 def join(**kw):
     kw['bot'].servers['card.freenode.net'].join(channel)
 
-hooks.add_hook('connected', 'newpages', join)
+#hooks.add_hook('connected', 'newpages', join)
