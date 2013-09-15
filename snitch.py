@@ -42,7 +42,7 @@ blank = {
 }
 
 
-help_msg = '!(stalk|ignore|unstalk|unignore)'
+help_msg = '!(stalk|ignore|unstalk|unignore) #rc_channel (page|user|log) regex'
 
 import json
 import threading
@@ -133,7 +133,7 @@ class SnitchBot:
 
     def add_rule(self, rc_channel, action, subtype, regex, channel):
         """
-        @param rc_channel: en.wikipedia
+        @param rc_channel: #en.wikipedia
         @param action: stalk/ignore
         @param subtype: user/page/summary/log
         @param regex: .*
@@ -158,7 +158,7 @@ class SnitchBot:
 
     def delete_rule(self, rc_channel, action, subtype, regex, channel):
         """
-        @param rc_channel: en.wikipedia
+        @param rc_channel: #en.wikipedia
         @param action: stalk/ignore
         @param subtype: user/page/summary/log
         @param regex: .*
