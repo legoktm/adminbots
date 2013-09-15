@@ -51,6 +51,7 @@ def run(**kw):
         kw['bot'].queue_msg(channel, kw['text'])
 
 def join(**kw):
-    kw['bot'].servers['card.freenode.net'].join(channel)
+    if kw['server'] == 'card.freenode.net':
+        kw['bot'].servers['card.freenode.net'].join(channel)
 
-#hooks.add_hook('connected', 'newpages', join)
+hooks.add_hook('connected', 'newpages', join)
