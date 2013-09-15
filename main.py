@@ -33,7 +33,7 @@ import debug
 import IPdata
 import newpages
 import rfpp
-import spi
+#import spi
 import stalker
 import ufaa
 
