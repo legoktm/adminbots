@@ -172,10 +172,10 @@ class SnitchBot:
             return False
         if regex in data[rc_channel][action][subtype]:
             if channel in data[rc_channel][action][subtype][regex]:
-                data[rc_channel][action][subtype][regex].remove(channel)
+                del data[rc_channel][action][subtype][regex][channel]
                 if not data[rc_channel][action][subtype][regex]:
                     # Remove empty rules
-                    data[rc_channel][action][subtype].remove(regex)
+                    del data[rc_channel][action][subtype][regex]
             else:
                 self.lock.release()
                 return False
