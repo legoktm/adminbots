@@ -33,7 +33,7 @@ else:
 environ = os.environ
 environ['PATH'] = '/bin:/usr/bin:/usr/local/bin'
 run = subprocess.call('jstart '
-                      '-N {0} '.format(script)
+                      '-N {0} '
                       '-mem 800M '
                       '/data/project/legobot/irclib/bin/python '
                       '/data/project/legobot/adminbots/{0}.py'.format(script),
