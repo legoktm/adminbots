@@ -32,7 +32,7 @@ scripts = {'snitch': 'snitch',
 script = None
 for sp in scripts:
     if sp in sys.argv:
-        script = sp
+        script = scripts[sp]
         break
 if not script:
     script = 'main'
