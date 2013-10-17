@@ -25,9 +25,16 @@ import os
 import subprocess
 import sys
 
-if 'snitch' in sys.argv:
-    script = 'snitch'
-else:
+scripts = {'snitch': 'snitch',
+           'echo': 'echooooooooooooo',
+           }
+
+script = None
+for sp in scripts:
+    if sp in sys.argv:
+        script = sp
+        break
+if not script:
     script = 'main'
 
 environ = os.environ
