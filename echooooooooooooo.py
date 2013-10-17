@@ -44,8 +44,8 @@ def on_msg(**kw):
         count = int(data['query']['notifications']['count'])
         print count
         if not (username in LOCAL_CACHE):
-            LOCAL_CACHE[username] = 9999999999999999999999
-        if LOCAL_CACHE[username] > count or force:
+            LOCAL_CACHE[username] = -10
+        if LOCAL_CACHE[username] < count or force:
             print 'queue msg'
             kw['bot'].queue_msg(channel, '{0}: You have {1} unread notifications '
                                          '(https://en.wikipedia.org/wiki/Special:Notifications)'.format(username, count))
