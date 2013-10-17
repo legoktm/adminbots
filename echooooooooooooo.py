@@ -33,6 +33,7 @@ def on_msg(**kw):
     LAST = time.time()
     for username in USERS:
         site = pywikibot.Site('en', 'wikipedia', username)
+        site.login()
         print username
         print 'Logged in as: {0}'.format(site.username())
         req = api.Request(site=site,
