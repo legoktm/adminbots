@@ -60,7 +60,7 @@ def on_msg(**kw):
                 kw['bot'].queue_msg(channel, '{0}@{1}: You have {2} unread notifications '
                                              '({3})'.format(username, site.dbName(), count, link))
 
-            LOCAL_CACHE[username] = count
+            LOCAL_CACHE[langproj][username] = count
     return True
 
 hooks.add_hook('on_msg', 'echo', on_msg)
